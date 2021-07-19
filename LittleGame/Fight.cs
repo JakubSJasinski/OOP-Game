@@ -7,42 +7,53 @@ namespace LittleGame
     class Fight
     {
         Random rand = new Random();
-        int player = 1;
-        public void StartFight(Warrior att1, Warrior att2)
+        static bool winner = false;
+        
+        public string StartFight(Warrior att1, Defender att2)
         {
             int Attack = att1.DoAttack();
-            //att1.Attack = att1.DoAttack();
+            int Attack2 = att1.DoAttack();
             int Defense = att2.DoDefense();
-            Console.WriteLine("DoDefense is {0} and attack is {1}",Defense, Attack);
-            if (att2.HP > 0)
+            int Defense2 = att2.DoDefense();
+            int Dmg1 = Attack - Defense;
+            int Dmg2 = Attack2 - Defense2;
+            Console.WriteLine("{2} Defense is {0} and attack is {1}",Defense, Attack,att1.Name);
+            Console.WriteLine("{2} Defense is {0} and attack is {1}", Defense2, Attack2, att2.Name);
+
+           
+            if (Dmg1>1)
+               {
+                   att2.HP -= Dmg1;
+               }
+                
+                if(att2.HP <=0)
             {
-                att2.HP -= (att1.Attack - att2.Defense);
+                Console.WriteLine("{0} has died", att2.Name);
+                return "Game Over";
             }
-         
+            return "Fight Again";
+            
+
         }
 
-        public void FightNow(Warrior att1, Warrior att2)
+        public void FightNow(Warrior att1, Defender att2)
         {
             while (true)
-                if ((player == 1) && (att2.HP > 0))
+            {
+                if (StartFight(att1, att2) == "Game Over")
                 {
-                    StartFight(att1, att2);
-                    Console.WriteLine("HP of:{0} = {1}", att2.Name, att2.HP);
-                    player = 2;
+                    Console.WriteLine("Game Over");
+                    break;
                 }
-                else if ((player == 2) && (att1.HP > 0))
+
+                if (StartFight(att1, att2) == "Game Over")
                 {
-                    StartFight(att2, att1);
-                    Console.WriteLine("Attacker {0} attacks for{1}",att2.Name,att2.Attack);
-                    Console.WriteLine("HP of:{0} = {1}",att1.Name,att1.HP);
-                    player = 1;
-
+                    Console.WriteLine("Game Over");
+                    break;
                 }
-                else break;
 
-            if (att1.HP <= 0) Console.WriteLine("Winner is {0}, ",att2.Name);
-            if (att2.HP <= 0) Console.WriteLine("Winner is {0}, ", att1.Name);
-
+                Console.WriteLine("Game Over");
+            }
         }
     }
 }
